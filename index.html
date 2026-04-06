@@ -7,7 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500;700&family=Barlow+Condensed:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<!-- Leaflet CSS for Map -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<!-- D3 & Leaflet JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
@@ -58,6 +60,7 @@
   @keyframes floatD { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-48%) translateX(1%); } }
   
   .hero-title { position: relative; z-index: 2; }
+  /* Reduced font size for better fitting */
   .hero-title h1 { font-family: var(--font-display); font-size: clamp(3rem, 7.5vw, 6.5rem); line-height: 0.9; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
   .hero-title h1 span { color: var(--gold); }
   .hero-subtitle { font-family: var(--font-cond); font-size: clamp(0.9rem, 2vw, 1.4rem); font-weight: 300; letter-spacing: 0.3em; color: rgba(242,237,228,0.5); text-transform: uppercase; margin-bottom: 2rem; }
@@ -115,6 +118,8 @@
   .reveal.visible { opacity: 1; transform: translateY(0); }
   .reveal-delay-1 { transition-delay: 0.15s; }
   .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+  .reveal-delay-4 { transition-delay: 0.6s; }
 
   /* SECTION COMMON */
   .section-super { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.8rem; opacity: 0.8; }
@@ -130,7 +135,20 @@
   
   .photo-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.4) 40%, rgba(8,8,8,0.1) 100%); z-index: 2; }
   .photo-overlay-toronto { background: linear-gradient(to top, rgba(26,26,46,0.98) 0%, rgba(26,26,46,0.5) 40%, rgba(8,8,8,0.05) 100%); }
-  .photo-overlay-compton { background: linear-gradient(to top, rgba(14,10,6,0.98) 0%, rgba(14,10,6,0.5) 40%, rgba(8,8,8,0.05) 100%); }
+  .photo-overlay-compton { background: linear-gradient(to top, rgba(14,10,6,0.98) 0%, rgba(14,10,6,0.5) 40%, rgba(8,8,8,0.05) 80%, rgba(8,8,8,1) 100%); }
+
+  .photo-panel-compton::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 25%;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 100%);
+    z-index: 3;
+    pointer-events: none;
+  }
 
   .photo-caption-area { position: relative; z-index: 3; padding: 2rem 3rem; width: 100%; }
   .photo-city-big { font-family: var(--font-display); font-size: clamp(4rem, 8vw, 7rem); line-height: 0.9; letter-spacing: -0.02em; }
@@ -178,24 +196,37 @@
   .track-item.kendrick-item .track-empty { grid-column: 1; }
   .track-item.kendrick-item .track-node { grid-column: 2; }
   .track-item.kendrick-item .track-content { grid-column: 3; text-align: left; }
+  .track-item.neutral-item .track-content { grid-column: 1; text-align: right; }
+  .track-item.neutral-item .track-node { grid-column: 2; }
+  .track-item.neutral-item .track-empty { grid-column: 3; }
+  .track-item.neutral-item-right .track-empty { grid-column: 1; }
+  .track-item.neutral-item-right .track-node { grid-column: 2; }
+  .track-item.neutral-item-right .track-content { grid-column: 3; text-align: left; }
   
   /* Inline dates on timeline */
   .track-node { display: flex; justify-content: center; align-items: center; background: var(--black); padding: 10px 0; z-index: 5; }
   .node-date { font-family: var(--font-mono); font-size: 0.75rem; color: var(--gold); letter-spacing: 0.1em; white-space: nowrap; background: #111; padding: 0.5rem 1rem; border: 1px solid rgba(245,197,24,0.4); border-radius: 20px; font-weight: 700; box-shadow: 0 0 15px rgba(0,0,0,0.8); }
   .drake-item .node-date { color: #8888cc; border-color: rgba(136,136,204,0.4); }
+  .neutral-item .node-date, .neutral-item-right .node-date { color: #aaa; border-color: rgba(136,136,136,0.4); }
+  .node-date.red-date { color: var(--red); border-color: rgba(200,16,46,0.4); }
 
   .track-content { padding: 1.8rem; border: 1px solid; position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease; border-radius: 4px; }
   .track-content.drake-card { border-color: rgba(91,91,154,0.3); background: rgba(26,26,46,0.6); }
   .track-content.kendrick-card { border-color: rgba(212,149,106,0.3); background: rgba(20,12,4,0.6); }
+  .track-content.neutral-card { border-color: rgba(136,136,136,0.3); background: rgba(30,30,30,0.6); }
   
   /* Highlight critical cards */
   .highlight-card.kendrick-card { border-color: var(--gold); box-shadow: 0 0 30px rgba(245,197,24,0.1); background: rgba(25, 20, 5, 0.8); }
   .highlight-card.drake-card { border-color: #8888cc; box-shadow: 0 0 30px rgba(136,136,204,0.1); }
+  .highlight-card.neutral-card { border-color: var(--gold); box-shadow: 0 0 30px rgba(245,197,24,0.1); }
+  .highlight-card.red-card { border-color: var(--red); box-shadow: 0 0 30px rgba(200,16,46,0.15); background: rgba(30,5,5,0.8); }
 
   .track-track { font-family: var(--font-cond); font-size: 1.6rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.5rem; }
   .track-artist-tag { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; margin-bottom: 0.8rem; text-transform: uppercase; font-weight: bold; }
   .drake-card .track-artist-tag { color: #8888cc; }
   .kendrick-card .track-artist-tag { color: var(--compton); }
+  .neutral-card .track-artist-tag { color: #aaa; }
+  .red-card .track-artist-tag { color: var(--red); }
   .track-desc { font-family: var(--font-body); font-weight: 300; font-size: 0.95rem; line-height: 1.7; color: rgba(242,237,228,0.7); }
   
   /* Always open video embeds */
@@ -209,6 +240,10 @@
   /* ═══ INTERACTIVE LYRICS ═══ */
   #lyrics-compare { padding: 8rem 3rem; background: #050505; }
   .lyrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 4rem; }
+  .lyrics-col-header { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 0.3rem; }
+  .lyrics-col-sub { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.3); text-transform: uppercase; margin-bottom: 2rem; }
+  .lyric-hint { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; color: rgba(242,237,228,0.5); margin-bottom: 0.8rem; text-transform: uppercase; margin-top: 1.5rem; border-bottom: 1px solid rgba(242,237,228,0.1); padding-bottom: 0.5rem; }
+
   .lyric-bar { position: relative; padding: 1.2rem; margin-bottom: 0.8rem; border: 1px solid rgba(242,237,228,0.08); cursor: pointer; transition: all 0.25s; background: rgba(242,237,228,0.02); }
   .lyric-bar:hover { border-color: rgba(242,237,228,0.3); background: rgba(242,237,228,0.05); }
   .lyric-bar.active { border-color: var(--gold) !important; background: rgba(245,197,24,0.08) !important; }
@@ -219,22 +254,169 @@
   .lyric-bar.active .lyric-bar-analysis { display: block; }
   .lyric-bar-tag { display: inline-block; font-family: var(--font-mono); font-weight: 700; font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.2rem 0.5rem; border: 1px solid; margin-bottom: 0.8rem; }
 
-  /* ═══ ALLIANCES NETWORK ═══ */
-  #alliances { padding: 8rem 3rem; background: #050505; }
-  .alliance-layout { margin-top: 4rem; }
+  /* ═══ FACEOFF ═══ */
+  #faceoff { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; }
+  .faceoff-divider { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: var(--paper); transform: translateX(-50%); z-index: 10; }
+  .faceoff-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--paper); color: var(--black); font-family: var(--font-display); font-size: 1.5rem; padding: 0.5rem 1.2rem; z-index: 11; letter-spacing: 0.1em; white-space: nowrap; }
+  .faceoff-side { padding: 6rem 4rem; display: flex; flex-direction: column; justify-content: flex-start; gap: 2rem; }
+  .faceoff-drake { background: var(--ovo); }
+  .faceoff-kendrick { background: #0e0a06; }
+  .faceoff-track-title { font-family: var(--font-display); font-size: 3rem; line-height: 1; }
+  .drake-accent { color: #8888cc; }
+  .kendrick-accent { color: var(--compton); }
+  .faceoff-date { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.3); text-transform: uppercase; }
+  .lyric-block { margin-bottom: 1.5rem; }
+  .lyric-label { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.3); text-transform: uppercase; margin-bottom: 0.8rem; }
+  .lyric-text { font-family: var(--font-body); font-style: italic; font-size: 1.1rem; line-height: 1.75; color: rgba(242,237,228,0.85); border-left: 2px solid; padding-left: 1.2rem; }
+  .drake-border { border-color: #8888cc; }
+  .kendrick-border { border-color: var(--compton); }
+  .analysis-block { padding: 1.5rem; border: 1px solid rgba(242,237,228,0.1); background: rgba(0,0,0,0.3); }
+  .analysis-heading { font-family: var(--font-cond); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(242,237,228,0.4); margin-bottom: 0.8rem; }
+  .analysis-text { font-family: var(--font-body); font-weight: 300; font-size: 0.95rem; line-height: 1.75; color: rgba(242,237,228,0.6); }
+  .faceoff-video { margin-top: 1rem; }
+  .faceoff-video iframe { width: 100%; aspect-ratio: 16/9; border: 1px solid rgba(242,237,228,0.1); display: block; }
+
+  /* ═══ WHO STOOD WHERE / ALLIANCES ═══ */
+  #who-stood { padding: 8rem 3rem; background: var(--black); }
+  .sides-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 3rem; align-items: start; margin-top: 4rem; }
+  .sides-divider { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding-top: 2rem; }
+  .sides-vs { font-family: var(--font-display); font-size: 4rem; color: rgba(242,237,228,0.1); writing-mode: vertical-rl; }
+  .sides-col-label { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 0.3rem; }
+  .sides-col-sub { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(242,237,228,0.3); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(242,237,228,0.08); }
+  .artist-card { display: flex; gap: 1.2rem; align-items: flex-start; padding: 1.2rem; border: 1px solid rgba(242,237,228,0.06); margin-bottom: 0.8rem; transition: all 0.3s; background: rgba(242,237,228,0.01); text-decoration: none; color: inherit; }
+  .artist-card:hover { border-color: rgba(242,237,228,0.2); background: rgba(242,237,228,0.04); }
+  .artist-card.k-side { border-left: 2px solid rgba(212,149,106,0.4); }
+  .artist-card.k-side:hover { border-color: rgba(212,149,106,0.6); background: rgba(212,149,106,0.04); }
+  .artist-card.d-side { border-left: 2px solid rgba(136,136,204,0.4); }
+  .artist-card.d-side:hover { border-color: rgba(136,136,204,0.6); background: rgba(136,136,204,0.04); }
+  .artist-card.neutral { border-left: 2px solid rgba(136,136,136,0.3); }
+
+  .artist-avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.1rem; }
+  .k-avatar { background: rgba(212,149,106,0.15); color: var(--compton); border: 1px solid rgba(212,149,106,0.3); }
+  .d-avatar { background: rgba(136,136,204,0.15); color: #8888cc; border: 1px solid rgba(136,136,204,0.3); }
+  .n-avatar { background: rgba(136,136,136,0.1); color: rgba(242,237,228,0.4); border: 1px solid rgba(136,136,136,0.2); }
+
+  .artist-info { flex: 1; min-width: 0; }
+  .artist-info-name { font-family: var(--font-cond); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.03em; margin-bottom: 0.15rem; }
+  .artist-info-role { font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.15em; color: rgba(242,237,228,0.3); text-transform: uppercase; margin-bottom: 0.4rem; }
+  .artist-info-note { font-family: var(--font-body); font-weight: 300; font-size: 0.85rem; line-height: 1.5; color: rgba(242,237,228,0.5); }
+
+  /* D3 Network container within alliances */
+  #alliances { padding: 4rem 3rem 8rem 3rem; background: var(--black); }
+  .alliance-layout { margin-top: 2rem; }
   #net-svg { width: 100%; height: 500px; display: block; background: #0a0a0a; border: 1px solid rgba(242,237,228,0.1); border-radius: 8px; }
   .net-legend { display: flex; gap: 2rem; justify-content: center; margin-bottom: 2rem; }
   .net-leg-item { display: flex; align-items: center; gap: 0.6rem; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; color: rgba(242,237,228,0.6); text-transform: uppercase; }
   .leg-c { width: 14px; height: 14px; border-radius: 50%; }
 
-  /* ═══ GLOBAL IMPACT ═══ */
-  #global { padding: 8rem 3rem; background: var(--black); }
+  /* ═══ GLOBAL IMPACT & TRENDS ═══ */
+  #global { padding: 8rem 3rem; background: #050505; position: relative; }
   .global-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 4rem; }
-  .stat-card { padding: 3rem 2rem; background: rgba(242,237,228,0.02); border: 1px solid rgba(242,237,228,0.06); }
+  .stat-card { padding: 3rem 2rem; background: rgba(242,237,228,0.02); border: 1px solid rgba(242,237,228,0.06); position: relative; overflow: hidden; transition: background 0.3s, border-color 0.3s; }
+  .stat-card:hover { background: rgba(245,197,24,0.04); border-color: rgba(245,197,24,0.15); }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease; }
+  .stat-card:hover::before { transform: scaleX(1); }
   .card-num { font-family: var(--font-display); font-size: 4rem; color: var(--gold); line-height: 1; margin-bottom: 0.3rem; }
+  .card-unit { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.3); text-transform: uppercase; margin-bottom: 1rem; }
   .card-desc { font-family: var(--font-body); font-weight: 300; font-size: 0.95rem; line-height: 1.7; color: rgba(242,237,228,0.6); }
+  .card-source { margin-top: 1rem; font-family: var(--font-mono); font-size: 0.5rem; color: rgba(242,237,228,0.2); letter-spacing: 0.1em; }
 
-  /* ═══ FOOTER ═══ */
+  .trends-section { margin-top: 5rem; padding: 3rem; border: 1px solid rgba(242,237,228,0.08); background: rgba(242,237,228,0.02); }
+  .trends-title-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+  .trends-title { font-family: var(--font-cond); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.8rem; color: rgba(242,237,228,0.5); }
+  .trends-open-link { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.1em; color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(245,197,24,0.3); transition: border-color 0.2s; opacity: 0.8; }
+  .trends-open-link:hover { border-color: var(--gold); opacity: 1; }
+  .trends-note { font-family: var(--font-mono); font-size: 0.6rem; color: rgba(242,237,228,0.3); letter-spacing: 0.1em; margin-bottom: 1.5rem; line-height: 1.7; }
+  .trends-chart { position: relative; height: 220px; }
+  .chart-area { position: absolute; inset: 0; display: flex; align-items: flex-end; gap: 3px; }
+  .chart-month { flex: 1; display: flex; flex-direction: column; gap: 2px; height: 100%; justify-content: flex-end; position: relative; }
+  .bar-k, .bar-d { border-radius: 1px 1px 0 0; transition: all 0.8s ease; position: relative; }
+  .bar-k { background: linear-gradient(to top, #9a6a3a, var(--compton)); }
+  .bar-d { background: linear-gradient(to top, #3a3a7a, #8888cc); }
+  .chart-labels { display: flex; gap: 3px; margin-top: 0.5rem; }
+  .chart-labels span { flex: 1; font-family: var(--font-mono); font-size: 0.45rem; color: rgba(242,237,228,0.25); text-align: center; letter-spacing: 0.05em; }
+  .chart-peak-label { position: absolute; top: -2rem; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 0.5rem; color: var(--gold); white-space: nowrap; background: var(--black); padding: 0.1rem 0.3rem; }
+  .trends-legend { display: flex; gap: 1.5rem; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.1em; margin-top: 1rem; }
+  .trends-k { color: var(--compton); }
+  .trends-d { color: #8888cc; }
+
+  /* ═══ GRAMMYS ═══ */
+  #grammys { padding: 8rem 3rem; background: linear-gradient(to bottom, #0a0a02, #080808); position: relative; overflow: hidden; }
+  .grammys-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(245,197,24,0.05) 0%, transparent 60%); pointer-events: none; }
+  .grammys-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; margin-top: 4rem; position: relative; z-index: 1; }
+  .grammy-awards { display: flex; flex-direction: column; gap: 1.5rem; }
+  .award-item { display: flex; gap: 1.5rem; align-items: center; padding: 1.2rem; border: 1px solid rgba(245,197,24,0.1); background: rgba(245,197,24,0.03); transition: border-color 0.3s; }
+  .award-item:hover { border-color: rgba(245,197,24,0.3); }
+  .award-icon { font-size: 2rem; flex-shrink: 0; }
+  .award-name { font-family: var(--font-cond); font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.2rem; color: var(--gold); }
+  .award-track { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; color: rgba(242,237,228,0.4); font-style: italic; }
+  .grammys-narrative { display: flex; flex-direction: column; gap: 1.5rem; }
+  .grammy-quote { font-family: var(--font-body); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--gold); border-left: 3px solid var(--gold); padding-left: 1.5rem; }
+  .grammy-text { font-family: var(--font-body); font-weight: 300; font-size: 1rem; line-height: 1.85; color: rgba(242,237,228,0.65); }
+  .grammy-detail { font-family: var(--font-mono); font-size: 0.7rem; line-height: 1.8; color: rgba(242,237,228,0.4); padding: 1rem; border: 1px solid rgba(242,237,228,0.08); border-left: 2px solid var(--gold); }
+  .grammy-video { margin-top: 1rem; }
+  .grammy-video iframe { width: 100%; aspect-ratio: 16/9; border: 1px solid rgba(245,197,24,0.2); display: block; }
+
+  /* ═══ SUPER BOWL ═══ */
+  #superbowl { min-height: 100vh; padding: 8rem 3rem; background: var(--black); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .superbowl-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(200,16,46,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 50%, rgba(245,197,24,0.05) 0%, transparent 50%); pointer-events: none; }
+  .superbowl-headline { font-family: var(--font-display); font-size: clamp(5rem, 15vw, 14rem); line-height: 0.85; position: relative; z-index: 1; }
+  .sb-line1 { color: var(--paper); }
+  .sb-line2 { color: transparent; -webkit-text-stroke: 2px var(--gold); }
+  .sb-line3 { color: var(--red); }
+  .superbowl-details { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3rem; margin-top: 5rem; position: relative; z-index: 1; }
+  .sb-detail { border-top: 1px solid rgba(242,237,228,0.15); padding-top: 1.5rem; }
+  .sb-detail-num { font-family: var(--font-display); font-size: 3rem; color: var(--gold); margin-bottom: 0.2rem; }
+  .sb-detail-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; color: rgba(242,237,228,0.35); text-transform: uppercase; margin-bottom: 0.8rem; }
+  .sb-detail-text { font-family: var(--font-body); font-weight: 300; font-size: 0.95rem; line-height: 1.7; color: rgba(242,237,228,0.6); }
+  .setlist-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.1em; color: rgba(242,237,228,0.4); border: 1px solid rgba(242,237,228,0.1); padding: 0.2rem 0.5rem; margin: 0.2rem; text-transform: uppercase; }
+  .setlist-tag.highlight { border-color: var(--gold); color: var(--gold); }
+  .superbowl-video { margin-top: 4rem; position: relative; z-index: 1; max-width: 900px; }
+  .superbowl-video iframe { width: 100%; aspect-ratio: 16/9; border: 1px solid rgba(200,16,46,0.3); display: block; }
+  .superbowl-video-label { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.25); text-transform: uppercase; margin-bottom: 0.8rem; }
+
+  /* ═══ LEGAL ═══ */
+  #legal { padding: 8rem 3rem; background: #050505; position: relative; }
+  .legal-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 6rem; margin-top: 4rem; }
+  .legal-timeline { display: flex; flex-direction: column; gap: 0; }
+  .legal-event { display: grid; grid-template-columns: 140px 1fr; gap: 2rem; position: relative; }
+  .legal-event:not(:last-child)::after { content: ''; position: absolute; left: 139px; top: 0; bottom: -2rem; width: 1px; background: rgba(200,16,46,0.3); }
+  .legal-date { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; color: var(--red); padding-top: 0.3rem; text-align: right; }
+  .legal-content { padding-bottom: 3rem; padding-left: 2rem; border-left: 2px solid transparent; transition: border-color 0.3s; }
+  .legal-event:hover .legal-content { border-color: rgba(200,16,46,0.3); }
+  .legal-event-title { font-family: var(--font-cond); font-size: 1.1rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem; color: var(--paper); }
+  .legal-event-text { font-family: var(--font-body); font-weight: 300; font-size: 0.95rem; line-height: 1.75; color: rgba(242,237,228,0.6); }
+  .legal-sidebar { display: flex; flex-direction: column; gap: 2rem; }
+  .sidebar-card { padding: 1.5rem; border: 1px solid rgba(200,16,46,0.2); background: rgba(200,16,46,0.03); }
+  .sidebar-card-title { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; color: var(--red); text-transform: uppercase; margin-bottom: 0.8rem; }
+  .sidebar-card-text { font-family: var(--font-body); font-weight: 300; font-size: 0.92rem; line-height: 1.65; color: rgba(242,237,228,0.55); }
+
+  /* ═══ VERDICT ═══ */
+  #verdict { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 3rem; background: var(--black); position: relative; overflow: hidden; }
+  .verdict-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 50% 60%, rgba(245,197,24,0.06) 0%, transparent 70%); pointer-events: none; }
+  .verdict-super { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.4em; color: rgba(242,237,228,0.3); text-transform: uppercase; margin-bottom: 2rem; position: relative; z-index: 1; }
+  .verdict-title { font-family: var(--font-display); font-size: clamp(5rem, 18vw, 16rem); line-height: 0.85; color: var(--gold); margin-bottom: 2rem; position: relative; z-index: 1; }
+  .verdict-sub { font-family: var(--font-body); font-style: italic; font-weight: 300; font-size: 1.4rem; color: rgba(242,237,228,0.6); max-width: 600px; line-height: 1.5; margin-bottom: 4rem; position: relative; z-index: 1; }
+  .poll-section { position: relative; z-index: 1; width: 100%; max-width: 600px; }
+  .poll-title { font-family: var(--font-cond); font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.8rem; color: rgba(242,237,228,0.4); margin-bottom: 2rem; }
+  .poll-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+  .poll-btn { padding: 1.5rem; border: 1px solid rgba(242,237,228,0.15); background: transparent; cursor: pointer; font-family: var(--font-display); font-size: 2rem; letter-spacing: 0.05em; transition: all 0.3s ease; }
+  .poll-btn span { display: block; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.3); margin-top: 0.3rem; text-transform: uppercase; }
+  .poll-btn-k { color: var(--compton); border-color: rgba(212,149,106,0.3); }
+  .poll-btn-k:hover, .poll-btn-k.selected { background: rgba(212,149,106,0.1); border-color: var(--compton); transform: translateY(-2px); }
+  .poll-btn-d { color: #8888cc; border-color: rgba(136,136,204,0.3); }
+  .poll-btn-d:hover, .poll-btn-d.selected { background: rgba(136,136,204,0.1); border-color: #8888cc; transform: translateY(-2px); }
+  .poll-result { display: none; flex-direction: column; gap: 1rem; }
+  .poll-result.show { display: flex; }
+  .result-bar-wrap { display: flex; align-items: center; gap: 1rem; }
+  .result-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; color: rgba(242,237,228,0.4); width: 100px; text-align: right; flex-shrink: 0; }
+  .result-bar-bg { flex: 1; height: 8px; background: rgba(242,237,228,0.08); }
+  .result-bar-fill { height: 100%; width: 0%; transition: width 1s ease; }
+  .result-bar-k { background: var(--compton); }
+  .result-bar-d { background: #8888cc; }
+  .result-pct { font-family: var(--font-display); font-size: 1.2rem; width: 60px; text-align: left; flex-shrink: 0; }
+
+  /* FOOTER */
   footer { padding: 4rem 3rem; border-top: 1px solid rgba(242,237,228,0.06); display: flex; justify-content: space-between; align-items: flex-end; }
   .footer-brand { font-family: var(--font-display); font-size: 3rem; color: rgba(242,237,228,0.15); line-height: 1; }
   .footer-text { font-family: var(--font-mono); font-size: 0.6rem; color: rgba(242,237,228,0.2); letter-spacing: 0.1em; text-align: right; line-height: 2; }
@@ -244,15 +426,28 @@
     .nav-chapters { display: none; }
     #hero-divider { height: 40vh; }
     .divider-caption { right: 1.5rem; bottom: 1.5rem; font-size: 0.5rem; }
-    .divider-photo { background-attachment: scroll; } /* Mobile fix */
+    .divider-photo { background-attachment: scroll; }
     .prologue-content { grid-template-columns: 1fr; }
     .prologue-side { padding: 4rem 2rem; }
+    #faceoff { grid-template-columns: 1fr; }
+    .faceoff-divider, .faceoff-label { display: none; }
+    .faceoff-side { padding: 5rem 2rem; }
+    .alliance-layout { grid-template-columns: 1fr; }
+    .grammys-layout { grid-template-columns: 1fr; }
+    .superbowl-details { grid-template-columns: 1fr; }
+    .legal-layout { grid-template-columns: 1fr; }
+    .global-grid { grid-template-columns: 1fr 1fr; }
+    .sides-grid { grid-template-columns: 1fr; }
+    .sides-divider { display: none; }
+    .lyrics-grid { grid-template-columns: 1fr; }
     .track-item { grid-template-columns: 1fr; gap: 1rem; }
     .timeline-spine { display: none; }
-    .track-item.drake-item .track-content, .track-item.kendrick-item .track-content { grid-column: 1; text-align: left; }
-    .track-item.drake-item .track-empty, .track-item.kendrick-item .track-empty { display: none; }
-    .track-item.drake-item .track-node, .track-item.kendrick-item .track-node { grid-column: 1; align-items: flex-start; padding: 0; background: transparent; }
-    .lyrics-grid, .global-grid { grid-template-columns: 1fr; }
+    .track-item.drake-item .track-content, .track-item.kendrick-item .track-content, .track-item.neutral-item .track-content, .track-item.neutral-item-right .track-content { grid-column: 1; text-align: left; }
+    .track-item.drake-item .track-empty, .track-item.kendrick-item .track-empty, .track-item.neutral-item .track-empty, .track-item.neutral-item-right .track-empty { display: none; }
+    .track-item.drake-item .track-node, .track-item.kendrick-item .track-node, .track-item.neutral-item .track-node, .track-item.neutral-item-right .track-node { grid-column: 1; align-items: flex-start; padding: 0; background: transparent; }
+    .poll-options { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 2rem; text-align: center; }
+    .footer-text { text-align: center; }
   }
 </style>
 </head>
@@ -266,11 +461,17 @@
     <li><a href="#prologue">Origins</a></li>
     <li><a href="#timeline">The War</a></li>
     <li><a href="#lyrics-compare">Lyrics</a></li>
-    <li><a href="#alliances">Alliances</a></li>
+    <li><a href="#faceoff">Face-Off</a></li>
+    <li><a href="#who-stood">Alliances</a></li>
     <li><a href="#global">Impact</a></li>
+    <li><a href="#grammys">Grammys</a></li>
+    <li><a href="#superbowl">Super Bowl</a></li>
+    <li><a href="#legal">Legal</a></li>
+    <li><a href="#verdict">Verdict</a></li>
   </ul>
 </nav>
 
+<!-- ═══════════════════ HERO ═══════════════════ -->
 <section id="hero">
   <div class="hero-bg-grid">
     <div class="hero-bg-left"></div>
@@ -286,12 +487,14 @@
     <div class="hero-meta">
       <span>KENDRICK LAMAR vs. DRAKE</span>
       <span>From Diss Tracks to the Supreme Court</span>
+      <span>An Interactive Scrollytelling Experience</span>
     </div>
     <div class="hero-byline">By <strong>Rohan Dutta</strong></div>
   </div>
   <div class="scroll-hint">SCROLL TO BEGIN</div>
 </section>
 
+<!-- ═══════════════════ HERO DIVIDER IMAGE ═══════════════════ -->
 <section id="hero-divider" class="reveal">
   <div class="divider-photo">
     <div class="divider-overlay"></div>
@@ -299,6 +502,7 @@
   </div>
 </section>
 
+<!-- ═══════════════════ PROLOGUE ═══════════════════ -->
 <section id="prologue">
   <div class="prologue-photo-panel photo-panel-toronto" id="torontoBg">
     <div class="photo-panel-inner" id="torontoParallax">
@@ -342,6 +546,7 @@
     </div>
   </div>
   
+  <!-- Map Widget -->
   <div class="map-wrap reveal">
     <div id="leaflet-map"></div>
     <div class="map-info-bar">
@@ -352,20 +557,22 @@
   </div>
 </section>
 
+<!-- ═══════════════════ TIMELINE ═══════════════════ -->
 <section id="timeline">
   <div class="timeline-bg-text">2024</div>
   <div class="timeline-header reveal">
     <div class="chapter-header">
-      <span class="chapter-num">§ 02 — THE WAR OF WORDS</span>
+      <span class="chapter-num">§ 02 — THE DEFINITIVE TIMELINE</span>
       <div class="chapter-line"></div>
     </div>
-    <div class="section-title">44 DAYS.<br>10 TRACKS.<br>HIP-HOP CHANGED.</div>
-    <p class="section-desc">From March 22 to May 5, 2024, a rapid-fire exchange rewrote the rules of diss culture forever. Critical moments are highlighted below.</p>
+    <div class="section-title">FROM THE BOOTH<br>TO THE BENCH</div>
+    <p class="section-desc">What began as a rapid-fire exchange of 10 tracks rewrote the rules of diss culture forever, snowballing into Grammys, Super Bowl stages, and the highest courts in the country. The complete chronological sequence.</p>
   </div>
 
   <div class="timeline-track">
     <div class="timeline-spine"></div>
 
+    <!-- Like That -->
     <div class="track-item kendrick-item reveal">
       <div class="track-empty"></div>
       <div class="track-node"><div class="node-date">MAR 22</div></div>
@@ -380,6 +587,44 @@
       </div>
     </div>
 
+    <!-- 7 Minute Drill -->
+    <div class="track-item neutral-item reveal">
+      <div class="track-content neutral-card">
+        <div class="track-artist-tag" style="color: #aaa">J. Cole</div>
+        <div class="track-track" style="color: #aaa">"7 Minute Drill"</div>
+        <div class="track-desc">A reluctant response. Cole criticizes Lamar's discography as overrated but apologizes days later at Dreamville Festival, removing the track from streaming and leaving Drake to fight alone.</div>
+      </div>
+      <div class="track-node"><div class="node-date">APR 5</div></div>
+      <div class="track-empty"></div>
+    </div>
+
+    <!-- Push Ups -->
+    <div class="track-item drake-item reveal">
+      <div class="track-content drake-card">
+        <div class="track-artist-tag" style="color: #ccccff">Drake</div>
+        <div class="track-track" style="color: #ccccff">"Push Ups"</div>
+        <div class="track-desc">Drake strikes back, mocking Lamar's height, his TDE contract splits, and his mainstream collaborations. A solid, traditional rap diss that temporarily rallies Drake's fanbase.</div>
+        <button class="video-toggle" onclick="toggleVideo(this)">▶ PLAY "PUSH UPS"</button>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/HKH9p19PRLA" loading="lazy" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="track-node"><div class="node-date">APR 19</div></div>
+      <div class="track-empty"></div>
+    </div>
+
+    <!-- Taylor Made Freestyle -->
+    <div class="track-item drake-item reveal">
+      <div class="track-content drake-card">
+        <div class="track-artist-tag" style="color: #ccccff">Drake</div>
+        <div class="track-track" style="color: #ccccff">"Taylor Made Freestyle"</div>
+        <div class="track-desc">A major miscalculation. Drake uses AI-generated vocals of Tupac and Snoop Dogg to goad Lamar into responding. Tupac's estate issues a cease and desist, forcing its removal.</div>
+      </div>
+      <div class="track-node"><div class="node-date">APR 19</div></div>
+      <div class="track-empty"></div>
+    </div>
+
+    <!-- Euphoria -->
     <div class="track-item kendrick-item reveal">
       <div class="track-empty"></div>
       <div class="track-node"><div class="node-date">APR 30</div></div>
@@ -387,17 +632,31 @@
         <div class="track-artist-tag" style="color: var(--gold)">Kendrick Lamar</div>
         <div class="track-track" style="color: var(--gold)">"Euphoria"</div>
         <div class="track-desc">A six-minute surgical strike. Lamar dismantles Drake's authenticity, questions his racial identity, and challenges his role as a father. No bars wasted.</div>
+        <!-- UNHIDDEN VIDEO -->
         <div class="video-container always-open">
           <iframe src="https://www.youtube.com/embed/NPqDIwWMtxg" loading="lazy" allowfullscreen></iframe>
         </div>
       </div>
     </div>
 
+    <!-- 6:16 in LA -->
+    <div class="track-item kendrick-item reveal">
+      <div class="track-empty"></div>
+      <div class="track-node"><div class="node-date">MAY 3</div></div>
+      <div class="track-content kendrick-card">
+        <div class="track-artist-tag" style="color: var(--gold)">Kendrick Lamar</div>
+        <div class="track-track" style="color: var(--gold)">"6:16 in LA"</div>
+        <div class="track-desc">Released directly to Instagram. Lamar alleges internal betrayal within OVO Sound, sowing paranoia by claiming Drake's own team is leaking information to him.</div>
+      </div>
+    </div>
+
+    <!-- Family Matters -->
     <div class="track-item drake-item reveal">
       <div class="track-content drake-card highlight-card">
         <div class="track-artist-tag" style="color: #ccccff">Drake</div>
         <div class="track-track" style="color: #ccccff">"Family Matters"</div>
         <div class="track-desc">Drake's strongest offensive: targeting Lamar, Rick Ross, Future, and The Weeknd simultaneously. Scorched earth strategy alleging domestic abuse and infidelity.</div>
+        <!-- UNHIDDEN VIDEO -->
         <div class="video-container always-open">
           <iframe src="https://www.youtube.com/embed/ZkXG3ZrXlbc" loading="lazy" allowfullscreen></iframe>
         </div>
@@ -406,19 +665,22 @@
       <div class="track-empty"></div>
     </div>
 
+    <!-- Meet the Grahams -->
     <div class="track-item kendrick-item reveal">
       <div class="track-empty"></div>
       <div class="track-node"><div class="node-date">MAY 3</div></div>
       <div class="track-content kendrick-card highlight-card">
         <div class="track-artist-tag" style="color: var(--gold)">Kendrick Lamar</div>
         <div class="track-track" style="color: var(--gold)">"Meet the Grahams"</div>
-        <div class="track-desc">Released <em>minutes</em> after "Family Matters". An open letter to Drake's family. The trap springs shut, proving Lamar had pre-written the response anticipating Drake's angles.</div>
+        <div class="track-desc">Released <em>minutes</em> after "Family Matters". An open letter to Drake's family over an eerie Alchemist beat. The trap springs shut, proving Lamar pre-wrote the response anticipating Drake's angles.</div>
+        <!-- UNHIDDEN VIDEO -->
         <div class="video-container always-open">
           <iframe src="https://www.youtube.com/embed/2QiFl9Dc7D0" loading="lazy" allowfullscreen></iframe>
         </div>
       </div>
     </div>
 
+    <!-- Not Like Us -->
     <div class="track-item kendrick-item reveal">
       <div class="track-empty"></div>
       <div class="track-node"><div class="node-date">MAY 4</div></div>
@@ -426,15 +688,109 @@
         <div class="track-artist-tag" style="color: var(--gold); font-size: 0.8rem;">★ THE KILLING BLOW</div>
         <div class="track-track" style="font-size: 2.2rem; color: var(--gold)">"Not Like Us"</div>
         <div class="track-desc">The anthem. Upbeat, infectious, devastating. Lamar's first solo #1 on the Billboard Hot 100. Five Grammys. Played at the Super Bowl to 133 million viewers. Song of summer, song of the century.</div>
+        <!-- UNHIDDEN VIDEO -->
         <div class="video-container always-open">
           <iframe src="https://www.youtube.com/embed/T6eK-2OQtew" loading="lazy" allowfullscreen></iframe>
         </div>
       </div>
     </div>
 
+    <!-- The Heart Part 6 -->
+    <div class="track-item drake-item reveal">
+      <div class="track-content drake-card" style="opacity: 0.85;">
+        <div class="track-artist-tag" style="color: #ccccff">Drake</div>
+        <div class="track-track" style="color: #ccccff">"The Heart Part 6"</div>
+        <div class="track-desc">Drake attempts a defensive maneuver, denying allegations and claiming his camp purposefully fed Lamar false information about a secret daughter. Widely considered a weak closing argument.</div>
+        <button class="video-toggle" onclick="toggleVideo(this)">▶ PLAY "THE HEART PART 6"</button>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/HJeY-FXidDQ" loading="lazy" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="track-node"><div class="node-date">MAY 5</div></div>
+      <div class="track-empty"></div>
+    </div>
+
+    <!-- Aftermath -->
+    <div class="track-item neutral-item reveal">
+      <div class="track-content neutral-card">
+        <div class="track-artist-tag" style="color: #aaa">The Aftermath</div>
+        <div class="track-track" style="color: #aaa">Industry Fallout</div>
+        <div class="track-desc">The hip-hop community overwhelmingly declares Kendrick the victor. Streaming platforms show a massive domestic spike for Lamar. Industry peers visibly distance themselves from OVO, cementing the "20v1" narrative.</div>
+      </div>
+      <div class="track-node"><div class="node-date">MAY 2024</div></div>
+      <div class="track-empty"></div>
+    </div>
+
+    <!-- Album Drops -->
+    <div class="track-item neutral-item-right reveal">
+      <div class="track-empty"></div>
+      <div class="track-node"><div class="node-date">NOV 2024</div></div>
+      <div class="track-content neutral-card">
+        <div class="track-artist-tag" style="color: #aaa">Kendrick Lamar & Drake</div>
+        <div class="track-track" style="color: #aaa">Post-War Projects</div>
+        <div class="track-desc">Kendrick surprise-releases his acclaimed album <em>GNX</em>, riding a wave of astronomical momentum. Meanwhile, Drake drops <em>Some Sexy Songs 4 U</em> with PARTYNEXTDOOR in a bid for commercial stabilization.</div>
+      </div>
+    </div>
+
+    <!-- UMG Lawsuit -->
+    <div class="track-item drake-item reveal">
+      <div class="track-content drake-card">
+        <div class="track-artist-tag" style="color: #ccccff">Drake</div>
+        <div class="track-track" style="color: #ccccff">The UMG Lawsuit</div>
+        <div class="track-desc">Unable to win the cultural war, Drake turns to the courts. He files a sprawling 117-page defamation lawsuit against his own distributor, Universal Music Group, claiming they intentionally promoted defamatory allegations in "Not Like Us."</div>
+      </div>
+      <div class="track-node"><div class="node-date">JAN 2025</div></div>
+      <div class="track-empty"></div>
+    </div>
+
+    <!-- Grammys -->
+    <div class="track-item kendrick-item reveal">
+      <div class="track-empty"></div>
+      <div class="track-node"><div class="node-date">FEB 2, 2025</div></div>
+      <div class="track-content kendrick-card highlight-card">
+        <div class="track-artist-tag" style="color: var(--gold)">67th Grammy Awards</div>
+        <div class="track-track" style="color: var(--gold)">The Institutional Sweep</div>
+        <div class="track-desc">"Not Like Us" wins five Grammys, including Record of the Year and Song of the Year. The music establishment validates the ultimate diss track. Drake is absent; Kendrick accepts in a "Canadian tuxedo."</div>
+      </div>
+    </div>
+
+    <!-- Super Bowl -->
+    <div class="track-item kendrick-item reveal">
+      <div class="track-empty"></div>
+      <div class="track-node"><div class="node-date">FEB 9, 2025</div></div>
+      <div class="track-content kendrick-card highlight-card">
+        <div class="track-artist-tag" style="color: var(--gold)">Super Bowl LIX</div>
+        <div class="track-track" style="color: var(--gold)">The Victory Lap</div>
+        <div class="track-desc">Kendrick performs the most-watched halftime show in television history (133.5M viewers). A politically charged spectacle closing with "Not Like Us," effectively dancing on the grave of the feud on America's biggest stage.</div>
+      </div>
+    </div>
+
+    <!-- Case Dismissed -->
+    <div class="track-item neutral-item reveal">
+      <div class="track-content neutral-card">
+        <div class="track-artist-tag" style="color: #aaa">SDNY Federal Court</div>
+        <div class="track-track" style="color: #aaa">Case Dismissed</div>
+        <div class="track-desc">A federal judge tosses Drake's lawsuit, ruling the lyrics were "hyperbolic vituperations" and "protected opinion" in the context of a rap battle, not actionable statements of verifiable fact.</div>
+      </div>
+      <div class="track-node"><div class="node-date">OCT 2025</div></div>
+      <div class="track-empty"></div>
+    </div>
+
+    <!-- Supreme Court Bounds -->
+    <div class="track-item neutral-item-right reveal">
+      <div class="track-empty"></div>
+      <div class="track-node"><div class="node-date red-date">2026</div></div>
+      <div class="track-content red-card highlight-card">
+        <div class="track-artist-tag">Appellate & Supreme Court Battle</div>
+        <div class="track-track" style="color: var(--paper)">The Future of Hip-Hop Speech</div>
+        <div class="track-desc">Drake appeals the dismissal to the Second Circuit. Amicus briefs from Yale Law, Howard, and Tulane defend UMG, arguing rap inherently relies on hyperbole. The legal war escalates toward the highest courts (Supreme Court bound), poised to redefine First Amendment protections for hip-hop artists everywhere.</div>
+      </div>
+    </div>
+
   </div>
 </section>
 
+<!-- ═══════════════════ INTERACTIVE LYRICS ═══════════════════ -->
 <section id="lyrics-compare">
   <div class="reveal">
     <div class="chapter-header">
@@ -442,27 +798,129 @@
       <div class="chapter-line"></div>
     </div>
     <div class="section-title">CLICK TO<br>COMPARE</div>
-    <p class="section-desc">Select any bar from either track to reveal the context, subtext, and strategic intent behind the most consequential lines of the feud.</p>
+    <p class="section-desc">Select any bar from either track to reveal the context, subtext, and strategic intent behind the most consequential lines of the entire feud.</p>
   </div>
 
   <div class="lyrics-grid">
+    <!-- DRAKE column -->
     <div class="reveal reveal-delay-1">
-      <div class="lyrics-col-header" style="color: #8888cc">Family Matters</div>
-      <div class="lyrics-col-sub">Drake — May 3, 2024</div>
+      <div class="lyrics-col-header" style="color: #8888cc">Drake's Arsenal</div>
+      <div class="lyrics-col-sub">OVO Sound Offensive Lines</div>
+      <p class="lyric-hint" style="border:none; margin-bottom: 0;">↓ Click any bar to analyse</p>
       
+      <!-- Push Ups -->
+      <div class="lyric-hint" style="margin-top: 1.5rem; color: #8888cc;">Push Ups</div>
+      <div class="lyric-bar drake-lyric" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"Drop and give me fifty, drop and give me fifty / Extortion baby, whole career you been drafted"</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:#8888cc;border-color:#8888cc;">Financial & Contractual Dig</span><br>
+          Drake hits at Lamar's former label situation (TDE), alleging that Anthony "Top Dawg" Tiffith takes 50% of his earnings. It attempts to strip away Kendrick's aura of independence and power.
+        </div>
+      </div>
+      
+      <div class="lyric-bar drake-lyric" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"Maroon 5 need a verse, you better make it witty / Then we need a verse for the Swifties"</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:#8888cc;border-color:#8888cc;">Pop Credibility Check</span><br>
+          A clever angle: Drake calls out Lamar's highly commercial pop features (Maroon 5, Taylor Swift) to counter Kendrick's strictly "conscious hip-hop savior" image.
+        </div>
+      </div>
+
+      <!-- Taylor Made Freestyle -->
+      <div class="lyric-hint" style="margin-top: 1.5rem; color: #8888cc;">Taylor Made Freestyle</div>
+      <div class="lyric-bar drake-lyric" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"Kendrick, we need ya, the West Coast savior / Bowing down to Smiley face, begging for a favor"</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:#8888cc;border-color:#8888cc;">Psychological Bait (AI Tupac)</span><br>
+          Using AI-generated vocals of Tupac Shakur, Drake attempts to weaponize Kendrick's own idol against him, taunting him to respond. The ethical breach caused immense backlash.
+        </div>
+      </div>
+
+      <!-- Family Matters -->
+      <div class="lyric-hint" style="margin-top: 1.5rem; color: #8888cc;">Family Matters</div>
+      <div class="lyric-bar drake-lyric" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"She said K. Dot make her feel uncomfortable / That man is evil, that's some shit that's unforgivable"</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:#8888cc;border-color:#8888cc;">Domestic Abuse Allegation</span><br>
+          Drake's primary attack vector. Alleges that Kendrick is abusive toward his fiancée Whitney Alford. This is Drake's attempt to shatter Lamar's public image.
+        </div>
+      </div>
+
       <div class="lyric-bar drake-lyric" onclick="toggleLyric(this)">
         <div class="lyric-bar-text">"Your partner Dave Free, you know he f---ed Whitney too / I hate to tell you but your son is probably Dave's too"</div>
         <div class="lyric-bar-analysis">
           <span class="lyric-bar-tag" style="color:#8888cc;border-color:#8888cc;">Personal Destruction</span><br>
-          The most severe allegation in the track — targeting Lamar's family directly. Drake accuses creative partner Dave Free of fathering Kendrick's child. This was the escalation that crossed every line.
+          Targeting Lamar's family directly. Drake accuses creative partner Dave Free of fathering Kendrick's child. This was the escalation that crossed every line.
+        </div>
+      </div>
+
+      <!-- The Heart Part 6 -->
+      <div class="lyric-hint" style="margin-top: 1.5rem; color: #8888cc;">The Heart Part 6</div>
+      <div class="lyric-bar drake-lyric" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"We plotted for a week and then we fed you the information / A daughter that's eleven years old, I bet he takes it"</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:#8888cc;border-color:#8888cc;">Defensive Spin</span><br>
+          Drake claims the "secret daughter" Kendrick rapped about in 'Meet the Grahams' was a planted mole operation. Listeners remained largely unconvinced.
         </div>
       </div>
     </div>
 
+    <!-- KENDRICK column -->
     <div class="reveal reveal-delay-2">
-      <div class="lyrics-col-header" style="color: var(--compton)">Not Like Us</div>
-      <div class="lyrics-col-sub">Kendrick Lamar — May 4, 2024</div>
+      <div class="lyrics-col-header" style="color: var(--compton)">Kendrick's Arsenal</div>
+      <div class="lyrics-col-sub">pgLang Defensive & Offensive Lines</div>
+      <p class="lyric-hint" style="border:none; margin-bottom: 0;">↓ Click any bar to analyse</p>
       
+      <!-- Like That -->
+      <div class="lyric-hint" style="margin-top: 1.5rem; color: var(--compton);">Like That</div>
+      <div class="lyric-bar" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"Motherf--- the big three, n---a, it's just big me"</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:var(--compton);border-color:var(--compton);">Assertion of Dominance</span><br>
+          The line that started it all. Refusing to share the pedestal with Drake and J. Cole, Lamar formally severs the decades-long "Big Three" narrative.
+        </div>
+      </div>
+
+      <!-- Euphoria -->
+      <div class="lyric-hint" style="margin-top: 1.5rem; color: var(--compton);">Euphoria</div>
+      <div class="lyric-bar" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"I hate the way that you walk, the way that you talk / I hate the way that you dress..."</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:var(--compton);border-color:var(--compton);">Pure Hatred / Identity Rejection</span><br>
+          Channeling DMX's legendary visceral disdain, Lamar strips away complex metaphors to state absolute, unadulterated hatred for Drake's entire being and persona.
+        </div>
+      </div>
+
+      <div class="lyric-bar" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"We don't wanna hear you say n---a no more / We don't wanna hear you say n---a no more"</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:var(--compton);border-color:var(--compton);">Racial Authenticity</span><br>
+          Lamar acts as a gatekeeper of Black culture, revoking Drake's (a biracial Canadian) cultural pass to use the slur, framing his usage as a performance rather than lived experience.
+        </div>
+      </div>
+
+      <!-- 6:16 in LA -->
+      <div class="lyric-hint" style="margin-top: 1.5rem; color: var(--compton);">6:16 in LA</div>
+      <div class="lyric-bar" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"Have you ever thought that OVO is working for me? / Fake bully, I hate bullies, you must be a terrible person"</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:var(--compton);border-color:var(--compton);">Psychological Warfare</span><br>
+          A pure mind game. Kendrick plants the seed that Drake's inner circle is leaking information, designed to make Drake paranoid and untrusting of his own team.
+        </div>
+      </div>
+
+      <!-- Meet the Grahams -->
+      <div class="lyric-hint" style="margin-top: 1.5rem; color: var(--compton);">Meet the Grahams</div>
+      <div class="lyric-bar" onclick="toggleLyric(this)">
+        <div class="lyric-bar-text">"Dear Adonis, I'm sorry that that man is your father, let me be honest..."</div>
+        <div class="lyric-bar-analysis">
+          <span class="lyric-bar-tag" style="color:var(--compton);border-color:var(--compton);">The Family Letter Format</span><br>
+          A chilling narrative device. Kendrick addresses Drake's son, mother, and alleged secret daughter directly, speaking to them with faux empathy about Drake's narcissism and moral failings.
+        </div>
+      </div>
+
+      <!-- Not Like Us -->
+      <div class="lyric-hint" style="margin-top: 1.5rem; color: var(--compton);">Not Like Us</div>
       <div class="lyric-bar" onclick="toggleLyric(this)">
         <div class="lyric-bar-text">"Tryna strike a chord and it's probably A minor"</div>
         <div class="lyric-bar-analysis">
@@ -482,30 +940,168 @@
   </div>
 </section>
 
-<section id="alliances">
+<!-- ═══════════════════ FACEOFF ═══════════════════ -->
+<section id="faceoff">
+  <div class="faceoff-divider"></div>
+  <div class="faceoff-label">MAY 3–4, 2024</div>
+
+  <div class="faceoff-side faceoff-drake reveal">
+    <div class="chapter-header">
+      <span class="chapter-num">§ 04 — FACE-OFF</span>
+      <div class="chapter-line" style="background: rgba(136,136,204,0.3)"></div>
+    </div>
+    <div class="faceoff-track-title drake-accent">Family<br>Matters</div>
+    <div class="faceoff-date">Drake — May 3, 2024, 3:00 AM</div>
+    <div class="lyric-block">
+      <div class="lyric-label">Tactical Angle</div>
+      <div class="lyric-text drake-border">Three-beat structure. Three targets. Rick Ross, Future, The Weeknd, and Kendrick — all hit simultaneously. The crushed van in the video: a reference to <em>good kid, m.A.A.d city</em>'s album cover — turned against Lamar.</div>
+    </div>
+    <div class="lyric-block">
+      <div class="lyric-label">Core Allegation</div>
+      <div class="lyric-text drake-border">Domestic abuse. Infidelity. Attempting to demolish Lamar's persona as a moral authority — dragging him into the mud.</div>
+    </div>
+    <div class="analysis-block">
+      <div class="analysis-heading">Critical Analysis</div>
+      <div class="analysis-text">Structurally praised. But it arrived minutes before "Meet the Grahams" proved Kendrick had already written his response days earlier. Drake had walked directly into a trap.</div>
+    </div>
+  </div>
+
+  <div class="faceoff-side faceoff-kendrick reveal reveal-delay-2">
+    <div class="chapter-header">
+      <span class="chapter-num">THE RESPONSE</span>
+      <div class="chapter-line" style="background: rgba(212,149,106,0.3)"></div>
+    </div>
+    <div class="faceoff-track-title kendrick-accent">Not Like<br>Us</div>
+    <div class="faceoff-date">Kendrick Lamar — May 4, 2024, 12:00 AM</div>
+    <div class="lyric-block">
+      <div class="lyric-label">Tactical Angle</div>
+      <div class="lyric-text kendrick-border">An upbeat West Coast club anthem — devastating blows delivered over a beat you can dance to. Mustard production. Summer anthem architecture. Inescapable.</div>
+    </div>
+    <div class="lyric-block">
+      <div class="lyric-label">The Accusation</div>
+      <div class="lyric-text kendrick-border">"Tryna strike a chord and it's probably A minor." Drake as a "colonizer" exploiting Atlanta — Future, Lil Baby, 21 Savage, Young Thug, Quavo. All used, none respected.</div>
+    </div>
+    <div class="analysis-block">
+      <div class="analysis-heading">Critical Analysis</div>
+      <div class="analysis-text">Lamar reframed the battle as a cultural defense, not a personal beef. By labeling Drake a "colonizer," he alienated him from the very industry hubs that sustained his career. A song you can play at a cookout that also levels an accusation of child abuse. Nothing like it had ever existed before.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ WHO STOOD WHERE / ALLIANCES ═══════════════════ -->
+<section id="who-stood">
   <div class="reveal">
     <div class="chapter-header">
-      <span class="chapter-num">§ 04 — HIP-HOP'S CIVIL WAR</span>
+      <span class="chapter-num">§ 05 — WHO STOOD WHERE</span>
       <div class="chapter-line"></div>
     </div>
     <div class="section-title">THE INDUSTRY<br>CHOSE SIDES</div>
     <p class="section-desc">Drake's camp called it "20 versus 1." The entire industry polarized, fracturing the hip-hop ecosystem.</p>
   </div>
 
-  <div class="alliance-layout reveal d2">
-    <div class="net-legend">
-      <div class="net-leg-item"><div class="leg-c" style="background:var(--gold)"></div>KENDRICK'S ALLIANCE</div>
-      <div class="net-leg-item"><div class="leg-c" style="background:#8888cc"></div>DRAKE'S CAMP</div>
-      <div class="net-leg-item"><div class="leg-c" style="background:var(--grey)"></div>NEUTRAL / WITHDREW</div>
+  <div class="sides-grid">
+    <!-- KENDRICK SIDE -->
+    <div class="reveal">
+      <div class="sides-col-label" style="color: var(--compton)">Team Kendrick</div>
+      <div class="sides-col-sub">Artists who supported or aligned with Lamar</div>
+
+      <div class="artist-card k-side">
+        <div class="artist-avatar k-avatar">FL</div>
+        <div class="artist-info">
+          <div class="artist-info-name">Future & Metro Boomin</div>
+          <div class="artist-info-role">Freebandz — Inciting Strike</div>
+          <div class="artist-info-note">Hosted the "Like That" verse. Personal & professional grievances with Drake ran deep. The shot heard across the industry.</div>
+        </div>
+      </div>
+
+      <div class="artist-card k-side">
+        <div class="artist-avatar k-avatar">RR</div>
+        <div class="artist-info">
+          <div class="artist-info-name">Rick Ross</div>
+          <div class="artist-info-role">Maybach Music Group — Attack</div>
+          <div class="artist-info-note">Coined "BBL Drizzy" — the viral accusation of cosmetic surgery that followed Drake everywhere. Challenged Drake's wealth claims with receipts.</div>
+        </div>
+      </div>
+
+      <div class="artist-card k-side">
+        <div class="artist-avatar k-avatar">M</div>
+        <div class="artist-info">
+          <div class="artist-info-name">Mustard</div>
+          <div class="artist-info-role">10 Summers — The Architect</div>
+          <div class="artist-info-note">Produced "Not Like Us." His signature West Coast sound gave Lamar the perfect vehicle — danceable, dominant, and inescapable.</div>
+        </div>
+      </div>
+
+      <div class="artist-card k-side">
+        <div class="artist-avatar k-avatar">PT</div>
+        <div class="artist-info">
+          <div class="artist-info-name">Pusha T</div>
+          <div class="artist-info-role">G.O.O.D. Music — Historical Rival</div>
+          <div class="artist-info-note">The man who revealed Drake had a secret son in 2018. His prior beef established the blueprint Kendrick refined. Openly celebrated Lamar's dominance.</div>
+        </div>
+      </div>
+
+      <div class="artist-card k-side">
+        <div class="artist-avatar k-avatar">TW</div>
+        <div class="artist-info">
+          <div class="artist-info-name">The Weeknd & A$AP Rocky</div>
+          <div class="artist-info-role">XO / AWGE — Subliminal Backing</div>
+          <div class="artist-info-note">Historical friction with Drake over industry politics. Provided subliminal support to Lamar's coalition without directly engaging.</div>
+        </div>
+      </div>
     </div>
-    <svg id="net-svg" viewBox="0 0 800 460"></svg>
+
+    <!-- DIVIDER -->
+    <div class="sides-divider">
+      <div class="sides-vs">VS</div>
+    </div>
+
+    <!-- DRAKE SIDE -->
+    <div class="reveal reveal-delay-2">
+      <div class="sides-col-label" style="color: #8888cc">Team Drake</div>
+      <div class="sides-col-sub">Artists who defended or stayed loyal to OVO</div>
+
+      <div class="artist-card d-side">
+        <div class="artist-avatar d-avatar">D</div>
+        <div class="artist-info">
+          <div class="artist-info-name">Drake</div>
+          <div class="artist-info-role">OVO Sound — The Target</div>
+          <div class="artist-info-note">Entered the feud defending his commercial supremacy and legacy. Released "Push Ups," "Taylor Made Freestyle," "Family Matters," and "The Heart Part 6." Lost the cultural war decisively.</div>
+        </div>
+      </div>
+
+      <div class="artist-card neutral">
+        <div class="artist-avatar n-avatar">JC</div>
+        <div class="artist-info">
+          <div class="artist-info-name">J. Cole</div>
+          <div class="artist-info-role">Dreamville — Withdrew</div>
+          <div class="artist-info-note">Initially allied with Drake via "7 Minute Drill." Publicly apologized to Lamar at Dreamville Festival days later. Pulled the track from all streaming. Preserved his peace.</div>
+        </div>
+      </div>
+
+      <div class="artist-card d-side" style="opacity:0.6;">
+        <div class="artist-avatar d-avatar">PN</div>
+        <div class="artist-info">
+          <div class="artist-info-name">PARTYNEXTDOOR</div>
+          <div class="artist-info-role">OVO Sound — Label Loyalty</div>
+          <div class="artist-info-note">Remained loyal to OVO. Released <em>Some Sexy Songs 4 U</em> with Drake during the aftermath — commercial survival mode for the label.</div>
+        </div>
+      </div>
+      
+      <!-- Network Visualization added below the Drake column -->
+      <div style="margin-top: 3rem;">
+        <div class="sides-col-sub" style="margin-bottom: 1rem;">Network Alliance Map</div>
+        <svg id="net-svg" viewBox="0 0 800 460" style="height: 300px; border-radius:4px;"></svg>
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- ═══════════════════ GLOBAL IMPACT ═══════════════════ -->
 <section id="global">
   <div class="reveal">
     <div class="chapter-header">
-      <span class="chapter-num">§ 05 — GLOBAL IMPACT</span>
+      <span class="chapter-num">§ 06 — GLOBAL IMPACT</span>
       <div class="chapter-line"></div>
     </div>
     <div class="section-title">THE NUMBERS<br>DON'T LIE</div>
@@ -513,12 +1109,223 @@
   </div>
 
   <div class="global-grid">
-    <div class="stat-card reveal"><div class="card-num">#1</div><div class="card-unit">Billboard Hot 100</div><div class="card-desc">Lamar's first solo track to debut at #1. Surpassed 2Pac's "Hit 'Em Up" in streaming velocity. Song of the summer.</div></div>
-    <div class="stat-card reveal reveal-delay-1"><div class="card-num">133M</div><div class="card-unit">Super Bowl Viewers</div><div class="card-desc">The halftime show broke all records. More viewers than Michael Jackson. The most-watched performance in television history.</div></div>
-    <div class="stat-card reveal reveal-delay-2"><div class="card-num">5</div><div class="card-unit">Grammy Awards</div><div class="card-desc">Record, Song, Rap Performance, Rap Song, Music Video. One diss track swept the highest music institution.</div></div>
+    <div class="stat-card reveal"><div class="card-num">#1</div><div class="card-unit">Billboard Hot 100</div><div class="card-desc">Lamar's first solo track to debut at #1. Surpassed 2Pac's "Hit 'Em Up" in streaming velocity. Song of the summer.</div><div class="card-source">SOURCE — BILLBOARD / CHARTMETRIC</div></div>
+    <div class="stat-card reveal reveal-delay-1"><div class="card-num">33%</div><div class="card-unit">Public: Kendrick Won</div><div class="card-desc">YouGov polling: 33% named Lamar the winner vs. 21% for Drake. A decisive margin in the court of public opinion.</div><div class="card-source">SOURCE — YOUGOV, MAY 2024</div></div>
+    <div class="stat-card reveal reveal-delay-2"><div class="card-num">62%</div><div class="card-unit">U.S. Streaming Share</div><div class="card-desc">Lamar's diss tracks skewed heavily domestic — 62.2% U.S. vs his usual 50.7% average — evidence of the feud's deep cultural resonance.</div><div class="card-source">SOURCE — LUMINATE DATA</div></div>
+    <div class="stat-card reveal"><div class="card-num">133M</div><div class="card-unit">Super Bowl Viewers</div><div class="card-desc">The halftime show broke all records. More viewers than Michael Jackson. The most-watched performance in television history.</div><div class="card-source">SOURCE — NFL / APPLE MUSIC</div></div>
+    <div class="stat-card reveal reveal-delay-1"><div class="card-num">5</div><div class="card-unit">Grammy Awards</div><div class="card-desc">Record, Song, Rap Performance, Rap Song, Music Video. One diss track swept the highest music institution.</div><div class="card-source">SOURCE — 67TH GRAMMY AWARDS, 2025</div></div>
+    <div class="stat-card reveal reveal-delay-2"><div class="card-num">117</div><div class="card-unit">Page Lawsuit</div><div class="card-desc">Drake's January 2025 lawsuit against Universal Music Group — attempting to use the courts to win a battle he couldn't win on record.</div><div class="card-source">SOURCE — SDNY FEDERAL COURT</div></div>
+  </div>
+
+  <!-- Google Trends Section -->
+  <div class="trends-section reveal">
+    <div class="trends-title-bar">
+      <div class="trends-title">Google Search Volume — Kendrick vs. Drake (2024)</div>
+      <a class="trends-open-link" href="https://trends.google.com/trends/explore?date=now%201-d&q=%2Fm%2F0g9x698,%2Fm%2F05mt_q&hl=en" target="_blank" rel="noopener">Open Live Google Trends ↗</a>
+    </div>
+    <p class="trends-note">The chart below reconstructs 2024 search volume based on published trend data. "Not Like Us" was the #1 trending song globally in Google's Year in Search 2024, second only to major political and sporting events.</p>
+    <div class="trends-chart">
+      <div class="chart-area" id="chartArea"></div>
+    </div>
+    <div class="chart-labels" id="chartLabels"></div>
+    <div class="trends-legend">
+      <span class="trends-k">■ Kendrick Lamar</span>
+      <span class="trends-d">■ Drake</span>
+    </div>
   </div>
 </section>
 
+<!-- ═══════════════════ GRAMMYS ═══════════════════ -->
+<section id="grammys">
+  <div class="grammys-bg"></div>
+  <div class="reveal">
+    <div class="chapter-header">
+      <span class="chapter-num">§ 07 — INSTITUTIONAL TRIUMPH</span>
+      <div class="chapter-line" style="background: rgba(245,197,24,0.3)"></div>
+    </div>
+    <div class="section-title" style="color: var(--gold)">THE GRAMMY<br>SWEEP</div>
+    <p class="section-desc">February 2, 2025. The 67th Grammy Awards. A diss track swept the music industry's highest honors. Drake was absent. Kendrick arrived in a Canadian tuxedo.</p>
+  </div>
+
+  <div class="grammys-layout">
+    <div class="grammy-awards">
+      <div class="award-item reveal"><div class="award-icon">◆</div><div><div class="award-name">Record of the Year</div><div class="award-track">"Not Like Us" — Kendrick Lamar</div></div></div>
+      <div class="award-item reveal reveal-delay-1"><div class="award-icon">◆</div><div><div class="award-name">Song of the Year</div><div class="award-track">"Not Like Us" — Kendrick Lamar</div></div></div>
+      <div class="award-item reveal reveal-delay-2"><div class="award-icon">◆</div><div><div class="award-name">Best Rap Performance</div><div class="award-track">"Not Like Us" — Kendrick Lamar</div></div></div>
+      <div class="award-item reveal reveal-delay-3"><div class="award-icon">◆</div><div><div class="award-name">Best Rap Song</div><div class="award-track">"Not Like Us" — Kendrick Lamar</div></div></div>
+      <div class="award-item reveal reveal-delay-4"><div class="award-icon">◆</div><div><div class="award-name">Best Music Video</div><div class="award-track">"Not Like Us" — Kendrick Lamar</div></div></div>
+
+      <div class="grammy-video reveal">
+        <div class="lyric-label" style="margin-bottom:0.8rem;">Watch: Acceptance Speech — Song of the Year</div>
+        <iframe src="https://www.youtube.com/embed/PqqAnsm4agc" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="grammys-narrative reveal reveal-delay-2">
+      <div class="grammy-quote">"Nothing is more powerful than rap music... We are the culture, it's gonna always stay here and live forever."</div>
+      <p class="grammy-text">Kendrick's acceptance speech reinforced his ideological stance. He shouted out Los Angeles neighborhoods. He performed "Not Like Us" live. The crowd sang every word.</p>
+      <div class="grammy-detail">
+        The "Canadian tuxedo" — denim-on-denim — worn by Lamar to the ceremony was widely interpreted as a final, deliberate visual slight against the Toronto-born Drake.<br><br>
+        Drake was notably absent from the ceremony. His silence was its own statement.
+      </div>
+      <p class="grammy-text">The surreal nature of the establishment celebrating a track that accused a peer of sex crimes highlighted the total cultural capitulation to Lamar's narrative. The Grammys didn't just validate "Not Like Us" — they sanctified it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ SUPER BOWL ═══════════════════ -->
+<section id="superbowl">
+  <div class="superbowl-bg"></div>
+  <div class="reveal" style="position:relative;z-index:1;">
+    <div class="chapter-header">
+      <span class="chapter-num">§ 08 — THE FINAL BLOW</span>
+      <div class="chapter-line"></div>
+    </div>
+  </div>
+  <div class="superbowl-headline reveal">
+    <div class="sb-line1">SUPER</div>
+    <div class="sb-line2">BOWL</div>
+    <div class="sb-line3">LIX</div>
+  </div>
+
+  <div class="superbowl-details">
+    <div class="sb-detail reveal">
+      <div class="sb-detail-num">133.5M</div>
+      <div class="sb-detail-label">Television Viewers</div>
+      <div class="sb-detail-text">Record-breaking. Surpassed Michael Jackson. The most-watched halftime performance in television history. February 9, 2025. Caesars Superdome, New Orleans.</div>
+    </div>
+    <div class="sb-detail reveal reveal-delay-1">
+      <div class="sb-detail-num">Setlist</div>
+      <div class="sb-detail-label">Tracks Performed</div>
+      <div class="sb-detail-text">
+        <span class="setlist-tag">DNA</span><span class="setlist-tag">Humble</span><span class="setlist-tag">Squabble Up</span><span class="setlist-tag">TV Off</span><span class="setlist-tag">All the Stars ft. SZA</span><span class="setlist-tag highlight">NOT LIKE US</span>
+      </div>
+    </div>
+    <div class="sb-detail reveal reveal-delay-2">
+      <div class="sb-detail-num">Political</div>
+      <div class="sb-detail-label">Symbolism</div>
+      <div class="sb-detail-text">Samuel L. Jackson as an authoritarian Uncle Sam. A divided American flag. Serena Williams performing the Crip Walk. Every moment deliberate. Every frame a statement against Drake — and the culture that enabled him.</div>
+    </div>
+  </div>
+
+  <!-- Super Bowl Images -->
+  <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:4rem;position:relative;z-index:1;">
+    <div style="overflow:hidden;">
+      <img src="https://raw.githubusercontent.com/ruhundutta/NotLikeUs/1cb2dcd29a33c9796ac1baa8bcdffbd486007e8b/25-kendrick-lamar-super-bowl-lix-halftime-show-2025-billboard-1240.webp"
+        alt="Kendrick Lamar Super Bowl LIX Halftime Show"
+        style="width:100%;height:380px;object-fit:cover;object-position:center top;display:block;filter:saturate(0.85);">
+    </div>
+    <div style="overflow:hidden;">
+      <img src="https://raw.githubusercontent.com/ruhundutta/NotLikeUs/1cb2dcd29a33c9796ac1baa8bcdffbd486007e8b/superbowl-lix-halftime-kendrick-lamar.webp"
+        alt="Kendrick Lamar Super Bowl LIX Halftime Show"
+        style="width:100%;height:380px;object-fit:cover;object-position:center;display:block;filter:saturate(0.85);">
+    </div>
+  </div>
+  <div style="position:relative;z-index:1;margin-top:0.6rem;font-family:var(--font-mono);font-size:0.5rem;letter-spacing:0.15em;color:rgba(242,237,228,0.2);text-align:right;">
+    📷 Images courtesy of <a href="https://www.billboard.com" target="_blank" rel="noopener" style="color:rgba(242,237,228,0.3);text-decoration:none;border-bottom:1px solid rgba(242,237,224,0.15);">Billboard</a>
+  </div>
+
+  <!-- YouTube link -->
+  <div class="superbowl-video reveal">
+    <div class="superbowl-video-label">Full performance — embedding blocked by NFL/Apple Music, opens on YouTube</div>
+    <a href="https://www.youtube.com/watch?v=KDorKy-13ak" target="_blank" rel="noopener"
+      style="display:flex;align-items:center;gap:1.2rem;padding:1.5rem 2rem;border:1px solid rgba(200,16,46,0.3);background:rgba(200,16,46,0.04);text-decoration:none;color:var(--paper);font-family:var(--font-cond);font-size:1.1rem;font-weight:700;letter-spacing:0.05em;">
+      <span style="font-size:2rem;color:var(--red);">▶</span>
+      <div>
+        <div>Kendrick Lamar — Apple Music Super Bowl LIX Halftime Show</div>
+        <div style="font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;color:rgba(242,237,228,0.3);margin-top:0.3rem;text-transform:uppercase;">Watch on YouTube ↗</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════ LEGAL ═══════════════════ -->
+<section id="legal">
+  <div class="reveal">
+    <div class="chapter-header">
+      <span class="chapter-num">§ 09 — EPILOGUE: LEGAL FALLOUT</span>
+      <div class="chapter-line" style="background: rgba(200,16,46,0.3)"></div>
+    </div>
+    <div class="section-title">FROM THE<br>BOOTH TO<br>THE BENCH</div>
+    <p class="section-desc">When you can't win in rap, take it to court. Drake's 117-page lawsuit against Universal Music Group began a First Amendment battle that could redefine hip-hop's legal landscape forever.</p>
+  </div>
+
+  <div class="legal-layout">
+    <div class="legal-timeline">
+      <div class="legal-event reveal">
+        <div class="legal-date">NOV 2024</div>
+        <div class="legal-content">
+          <div class="legal-event-title">Kendrick Drops <em>GNX</em></div>
+          <div class="legal-event-text">Surprise-released his sixth studio album. Capitalizing on astronomical post-feud momentum. Drake released <em>Some Sexy Songs 4 U</em> with PARTYNEXTDOOR — commercial survival mode.</div>
+        </div>
+      </div>
+      <div class="legal-event reveal">
+        <div class="legal-date">JAN 2025</div>
+        <div class="legal-content">
+          <div class="legal-event-title">Drake Files 117-Page Lawsuit</div>
+          <div class="legal-event-text">Filed against his own distributor, Universal Music Group. Drake alleged UMG "intentionally published and promoted" "Not Like Us" knowing the pedophilia and sex trafficking allegations were false and defamatory. The rap war becomes a legal war.</div>
+        </div>
+      </div>
+      <div class="legal-event reveal">
+        <div class="legal-date">OCT 2025</div>
+        <div class="legal-content">
+          <div class="legal-event-title">Federal Judge Dismisses the Case</div>
+          <div class="legal-event-text">Judge Jeannette A. Vargas ruled the lyrics constituted "hyperbolic vituperations" and "protected opinion" within "perhaps the most infamous rap battle in the genre's history." Not actionable statements of verifiable fact.</div>
+        </div>
+      </div>
+      <div class="legal-event reveal">
+        <div class="legal-date">EARLY 2026</div>
+        <div class="legal-content">
+          <div class="legal-event-title">Drake Appeals to the Second Circuit</div>
+          <div class="legal-event-text">Refuses to accept dismissal. Escalates to the U.S. Court of Appeals for the Second Circuit. UMG fires back with an 83-page appellate brief — accusing Drake of "astounding hypocrisy" given his own unverified allegations in "Family Matters."</div>
+        </div>
+      </div>
+      <div class="legal-event reveal">
+        <div class="legal-date">APR 2026</div>
+        <div class="legal-content">
+          <div class="legal-event-title">Yale, Howard, Tulane Weigh In</div>
+          <div class="legal-event-text">The Floyd Abrams Institute for Freedom of Expression at Yale Law School files amicus briefs supporting UMG. A coalition from Howard University and Tulane emphasizes hip-hop's foundational reliance on hyperbole. The outcome will reshape how courts interpret the genre forever.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-sidebar reveal reveal-delay-2">
+      <div class="sidebar-card"><div class="sidebar-card-title">The UMG Counter-Argument</div><div class="sidebar-card-text">UMG highlighted Drake's "astounding hypocrisy" — noting he used UMG platforms to levy unverified domestic abuse allegations against Lamar, and that he actively provoked attacks using AI-generated voices of Tupac Shakur.</div></div>
+      <div class="sidebar-card"><div class="sidebar-card-title">The Yale Position</div><div class="sidebar-card-text">The Floyd Abrams Institute argued ruling in Drake's favor would "critically undermine a highly creative art form built on exaggeration, insult, and wordplay." Hip-hop as protected speech — the stakes could not be higher.</div></div>
+      <div class="sidebar-card"><div class="sidebar-card-title">What's At Stake</div><div class="sidebar-card-text">The 2026 appellate case stands to fundamentally reshape how courts interpret hip-hop lyrics. The genre's inherent competitiveness — its DNA — may be ruled either protected artistic expression or subject to strict defamation liability.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ VERDICT ═══════════════════ -->
+<section id="verdict">
+  <div class="verdict-bg"></div>
+  <div class="verdict-super reveal">The question that started it all</div>
+  <div class="verdict-title reveal reveal-delay-1">WHO<br>WON?</div>
+  <div class="verdict-sub reveal reveal-delay-2">"Final poll: Did Kendrick Lamar or Drake win the great rap war of 2024?" YouGov asked. The culture answered. But what do you think?</div>
+  <div class="poll-section reveal reveal-delay-3">
+    <div class="poll-title">Cast Your Verdict</div>
+    <div class="poll-options" id="pollOptions">
+      <button class="poll-btn poll-btn-k" onclick="vote('kendrick')">KENDRICK<br><span>The Compton Prophet</span></button>
+      <button class="poll-btn poll-btn-d" onclick="vote('drake')">DRAKE<br><span>The OVO Empire</span></button>
+    </div>
+    <div class="poll-result" id="pollResult">
+      <div class="result-bar-wrap">
+        <div class="result-label">KENDRICK</div>
+        <div class="result-bar-bg"><div class="result-bar-fill result-bar-k" id="barK"></div></div>
+        <div class="result-pct" id="pctK" style="color: var(--compton)"></div>
+      </div>
+      <div class="result-bar-wrap">
+        <div class="result-label">DRAKE</div>
+        <div class="result-bar-bg"><div class="result-bar-fill result-bar-d" id="barD"></div></div>
+        <div class="result-pct" id="pctD" style="color: #8888cc"></div>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:0.55rem;color:rgba(242,237,228,0.2);margin-top:1rem;letter-spacing:0.1em;">YouGov benchmark: 33% Kendrick — 21% Drake — 46% No Clear Winner</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
 <footer>
   <div class="footer-brand">NOT<br>LIKE<br>US</div>
   <div class="footer-text">
@@ -530,6 +1337,10 @@
   </div>
 </footer>
 
+<!-- Twitter Widget Script -->
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
 <script>
   // ─── PROGRESS BAR ───
   const progressBar = document.getElementById('progress-bar');
@@ -564,6 +1375,17 @@
   }
   window.addEventListener('scroll', handleParallax, { passive: true });
 
+  // ─── HERO PARALLAX ───
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY;
+    const heroVs = document.querySelector('.hero-vs');
+    if (heroVs) {
+      heroVs.style.transform = `translate(-50%, calc(-50% + ${s * 0.3}px))`;
+      document.querySelector('.hero-k').style.transform = `translateY(calc(-50% + ${s * 0.15}px))`;
+      document.querySelector('.hero-d').style.transform = `translateY(calc(-50% + ${s * 0.2}px))`;
+    }
+  }, { passive: true });
+
   // ─── VIDEO TOGGLE ───
   function toggleVideo(btn) {
     const container = btn.nextElementSibling;
@@ -579,6 +1401,79 @@
     const wasActive = bar.classList.contains('active');
     bar.closest('.reveal').querySelectorAll('.lyric-bar').forEach(b => b.classList.remove('active'));
     if (!wasActive) bar.classList.add('active');
+  }
+
+  // ─── SEARCH TRENDS CHART ───
+  const chartData = [
+    { month: 'JAN', k: 18, d: 35 }, { month: 'FEB', k: 20, d: 38 },
+    { month: 'MAR', k: 85, d: 42 }, { month: 'APR', k: 92, d: 78 },
+    { month: 'MAY', k: 100, d: 68 }, { month: 'JUN', k: 88, d: 32 },
+    { month: 'JUL', k: 75, d: 28 }, { month: 'AUG', k: 62, d: 25 },
+    { month: 'SEP', k: 45, d: 30 }, { month: 'OCT', k: 38, d: 28 },
+    { month: 'NOV', k: 55, d: 20 }, { month: 'DEC', k: 48, d: 18 },
+  ];
+
+  const chartArea = document.getElementById('chartArea');
+  const chartLabels = document.getElementById('chartLabels');
+
+  if(chartArea && chartLabels) {
+    chartData.forEach((d, i) => {
+      const monthDiv = document.createElement('div');
+      monthDiv.className = 'chart-month';
+
+      const barD = document.createElement('div');
+      barD.className = 'bar-d';
+      barD.style.cssText = `height:${d.d * 1.9}px;opacity:0;transition:height 1s ease ${i*0.04}s,opacity 0.5s ease ${i*0.04}s`;
+
+      const barK = document.createElement('div');
+      barK.className = 'bar-k';
+      barK.style.cssText = `height:${d.k * 1.9}px;opacity:0;transition:height 1s ease ${i*0.04}s,opacity 0.5s ease ${i*0.04}s;position:relative`;
+
+      if (d.month === 'MAY') {
+        const label = document.createElement('div');
+        label.className = 'chart-peak-label';
+        label.textContent = '★ NLU';
+        barK.appendChild(label);
+      }
+
+      monthDiv.appendChild(barD);
+      monthDiv.appendChild(barK);
+      chartArea.appendChild(monthDiv);
+
+      const labelSpan = document.createElement('span');
+      labelSpan.textContent = d.month;
+      chartLabels.appendChild(labelSpan);
+    });
+
+    const chartObs = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        document.querySelectorAll('.bar-k, .bar-d').forEach(bar => { bar.style.opacity = '0.85'; });
+        chartObs.disconnect();
+      }
+    }, { threshold: 0.3 });
+    chartObs.observe(document.getElementById('global'));
+  }
+
+  // ─── POLL ───
+  let hasVoted = false;
+  function vote(choice) {
+    if (hasVoted) return;
+    hasVoted = true;
+    const base = { kendrick: 33, drake: 21 };
+    if (choice === 'kendrick') base.kendrick += 5;
+    else base.drake += 5;
+    const total = base.kendrick + base.drake;
+    const kPct = Math.round((base.kendrick / total) * 100);
+    const dPct = 100 - kPct;
+    document.getElementById('pollOptions').style.display = 'none';
+    const result = document.getElementById('pollResult');
+    result.classList.add('show');
+    setTimeout(() => {
+      document.getElementById('barK').style.width = kPct + '%';
+      document.getElementById('barD').style.width = dPct + '%';
+      document.getElementById('pctK').textContent = kPct + '%';
+      document.getElementById('pctD').textContent = dPct + '%';
+    }, 100);
   }
 
   // ─── LEAFLET MAP INIT ───
@@ -609,7 +1504,6 @@
     L.marker(compton, { icon: makeIcon('#C9A227') }).addTo(map);
     L.marker(toronto, { icon: makeIcon('#8888cc') }).addTo(map);
 
-    // Draw geodesic arc approximation
     function geodesicArc(from, to, steps) {
       const pts = [];
       const lat1 = from[0] * Math.PI / 180;
