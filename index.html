@@ -57,8 +57,10 @@
   .hero-title h1 { font-family: var(--font-display); font-size: clamp(3rem, 9vw, 9rem); line-height: 0.9; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
   .hero-title h1 span { color: var(--gold); }
   .hero-subtitle { font-family: var(--font-cond); font-size: clamp(0.9rem, 2vw, 1.4rem); font-weight: 300; letter-spacing: 0.3em; color: rgba(242,237,228,0.5); text-transform: uppercase; margin-bottom: 2rem; }
-  .hero-meta { display: flex; gap: 3rem; font-family: var(--font-mono); font-size: 0.65rem; color: rgba(242,237,228,0.4); letter-spacing: 0.1em; }
+  .hero-meta { display: flex; gap: 3rem; font-family: var(--font-mono); font-size: 0.75rem; color: rgba(242,237,228,0.4); letter-spacing: 0.1em; }
   .hero-meta span:first-child { color: var(--gold); opacity: 0.7; }
+  .hero-byline { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.25em; color: rgba(242,237,228,0.35); text-transform: uppercase; margin-top: 1rem; }
+  .hero-byline strong { color: rgba(242,237,228,0.7); font-weight: 500; }
   .scroll-hint { position: absolute; bottom: 2rem; right: 3rem; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.3); writing-mode: vertical-rl; display: flex; align-items: center; gap: 1rem; }
   .scroll-hint::before { content: ''; display: block; width: 1px; height: 4rem; background: linear-gradient(to bottom, transparent, rgba(245,197,24,0.5)); animation: scrollLine 2s ease-in-out infinite; }
   @keyframes scrollLine { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
@@ -79,7 +81,7 @@
   /* SECTION COMMON */
   .section-super { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.8rem; opacity: 0.8; }
   .section-title { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5.5rem); line-height: 0.95; margin-bottom: 0.5rem; }
-  .section-desc { font-size: 0.95rem; line-height: 1.8; color: rgba(242,237,228,0.5); max-width: 600px; margin-top: 1rem; }
+  .section-desc { font-size: 1.05rem; line-height: 1.9; color: rgba(242,237,228,0.5); max-width: 600px; margin-top: 1rem; }
 
   /* ═══ PROLOGUE ═══ */
   #prologue { min-height: 100vh; }
@@ -182,27 +184,21 @@
 
   /* Twitter-like image panels using CSS art */
   .city-photo-toronto {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    background:
-      radial-gradient(ellipse 30% 15% at 35% 60%, rgba(245,197,24,0.15) 0%, transparent 100%),
-      radial-gradient(ellipse 20% 10% at 60% 55%, rgba(245,197,24,0.1) 0%, transparent 100%),
-      radial-gradient(ellipse 15% 8% at 75% 65%, rgba(245,197,24,0.08) 0%, transparent 100%),
-      linear-gradient(180deg, #020210 0%, #080830 30%, #0a0a25 50%, #060618 70%, #020210 100%);
     position: absolute;
     inset: 0;
+    background-image: url('https://raw.githubusercontent.com/ruhundutta/NotLikeUs/1cb2dcd29a33c9796ac1baa8bcdffbd486007e8b/Toronto.jpg');
+    background-size: cover;
+    background-position: center 40%;
+    filter: saturate(0.7) brightness(0.6);
   }
 
   .city-photo-compton {
-    width: 100%;
-    height: 100%;
-    background:
-      radial-gradient(ellipse 40% 20% at 50% 70%, rgba(212,149,106,0.12) 0%, transparent 100%),
-      radial-gradient(ellipse 60% 30% at 30% 80%, rgba(180,100,40,0.08) 0%, transparent 100%),
-      linear-gradient(180deg, #100805 0%, #1e1005 30%, #281508 50%, #1a0d05 70%, #100805 100%);
     position: absolute;
     inset: 0;
+    background-image: url('https://raw.githubusercontent.com/ruhundutta/NotLikeUs/1cb2dcd29a33c9796ac1baa8bcdffbd486007e8b/Compton.jpg');
+    background-size: cover;
+    background-position: center 50%;
+    filter: saturate(0.65) brightness(0.55);
   }
 
   /* Prologue content sections */
@@ -247,7 +243,7 @@
   }
 
   .artist-name { font-family: var(--font-display); font-size: 2rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
-  .prologue-text { font-size: 0.95rem; line-height: 1.8; color: rgba(242,237,228,0.7); }
+  .prologue-text { font-size: 1.05rem; line-height: 1.85; color: rgba(242,237,228,0.7); }
   .stat-block { display: flex; flex-direction: column; gap: 1rem; }
   .stat-row { display: flex; gap: 2rem; }
   .stat-item { display: flex; flex-direction: column; gap: 0.2rem; }
@@ -319,12 +315,12 @@
   .track-content.drake-card:hover { box-shadow: 0 8px 40px rgba(91,91,154,0.2); }
   .track-content.kendrick-card { border-color: rgba(212,149,106,0.3); background: rgba(20,12,4,0.5); }
   .track-content.kendrick-card:hover { box-shadow: 0 8px 40px rgba(212,149,106,0.2); }
-  .track-track { font-family: var(--font-cond); font-size: 1.3rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.5rem; }
-  .track-artist-tag { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; margin-bottom: 0.8rem; text-transform: uppercase; }
+  .track-track { font-family: var(--font-cond); font-size: 1.4rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.5rem; }
+  .track-artist-tag { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; margin-bottom: 0.8rem; text-transform: uppercase; }
   .drake-card .track-artist-tag { color: #8888cc; }
   .kendrick-card .track-artist-tag { color: var(--compton); }
-  .track-desc { font-size: 0.82rem; line-height: 1.6; color: rgba(242,237,228,0.55); }
-  .track-impact { margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid rgba(242,237,228,0.08); display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.55rem; color: rgba(242,237,228,0.3); letter-spacing: 0.1em; }
+  .track-desc { font-size: 0.92rem; line-height: 1.7; color: rgba(242,237,228,0.6); }
+  .track-impact { margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid rgba(242,237,228,0.08); display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.6rem; color: rgba(242,237,228,0.35); letter-spacing: 0.1em; }
   .impact-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
   .impact-dot.high { background: var(--red); width: 8px; height: 8px; }
   .impact-dot.nuclear { background: var(--gold); width: 10px; height: 10px; box-shadow: 0 0 8px var(--gold); }
@@ -401,8 +397,8 @@
   .lyric-bar-text {
     font-family: var(--font-serif);
     font-style: italic;
-    font-size: 0.9rem;
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.65;
     color: rgba(242,237,228,0.7);
   }
 
@@ -413,9 +409,9 @@
     margin-top: 0.8rem;
     padding-top: 0.8rem;
     border-top: 1px solid rgba(242,237,228,0.08);
-    font-size: 0.78rem;
-    line-height: 1.6;
-    color: rgba(242,237,228,0.5);
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: rgba(242,237,228,0.55);
     font-style: normal;
     font-family: var(--font-cond);
     letter-spacing: 0.02em;
@@ -456,12 +452,12 @@
   .faceoff-date { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.3); text-transform: uppercase; }
   .lyric-block { margin-bottom: 1.5rem; }
   .lyric-label { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.3); text-transform: uppercase; margin-bottom: 0.8rem; }
-  .lyric-text { font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; line-height: 1.7; color: rgba(242,237,228,0.85); border-left: 2px solid; padding-left: 1.2rem; }
+  .lyric-text { font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; line-height: 1.75; color: rgba(242,237,228,0.85); border-left: 2px solid; padding-left: 1.2rem; }
   .drake-border { border-color: #8888cc; }
   .kendrick-border { border-color: var(--compton); }
   .analysis-block { padding: 1.5rem; border: 1px solid rgba(242,237,228,0.1); background: rgba(0,0,0,0.3); }
   .analysis-heading { font-family: var(--font-cond); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(242,237,228,0.4); margin-bottom: 0.8rem; }
-  .analysis-text { font-size: 0.85rem; line-height: 1.7; color: rgba(242,237,228,0.6); }
+  .analysis-text { font-size: 0.95rem; line-height: 1.75; color: rgba(242,237,228,0.6); }
   .faceoff-video { margin-top: 1rem; }
   .faceoff-video iframe { width: 100%; aspect-ratio: 16/9; border: 1px solid rgba(242,237,228,0.1); display: block; }
 
@@ -478,7 +474,7 @@
   .legend-info { flex: 1; }
   .legend-name { font-family: var(--font-cond); font-size: 0.9rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
   .legend-label { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.15em; color: rgba(242,237,228,0.3); text-transform: uppercase; margin-bottom: 0.4rem; }
-  .legend-desc { font-size: 0.8rem; line-height: 1.5; color: rgba(242,237,228,0.5); }
+  .legend-desc { font-size: 0.88rem; line-height: 1.6; color: rgba(242,237,228,0.55); }
 
   /* ═══ WHO STOOD WHERE ═══ */
   #who-stood {
@@ -566,7 +562,7 @@
   .artist-info { flex: 1; min-width: 0; }
   .artist-info-name { font-family: var(--font-cond); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.03em; margin-bottom: 0.15rem; }
   .artist-info-role { font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.15em; color: rgba(242,237,228,0.3); text-transform: uppercase; margin-bottom: 0.4rem; }
-  .artist-info-note { font-size: 0.75rem; line-height: 1.4; color: rgba(242,237,228,0.45); }
+  .artist-info-note { font-size: 0.85rem; line-height: 1.5; color: rgba(242,237,228,0.5); }
 
   .artist-links { display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap; }
   .artist-link-btn {
@@ -593,7 +589,7 @@
   .stat-card:hover::before { transform: scaleX(1); }
   .card-num { font-family: var(--font-display); font-size: 4rem; color: var(--gold); line-height: 1; margin-bottom: 0.3rem; }
   .card-unit { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; color: rgba(242,237,228,0.3); text-transform: uppercase; margin-bottom: 1rem; }
-  .card-desc { font-size: 0.85rem; line-height: 1.6; color: rgba(242,237,228,0.55); }
+  .card-desc { font-size: 0.95rem; line-height: 1.7; color: rgba(242,237,228,0.6); }
   .card-source { margin-top: 1rem; font-family: var(--font-mono); font-size: 0.5rem; color: rgba(242,237,228,0.2); letter-spacing: 0.1em; }
 
   /* Google Trends iframe area */
@@ -667,7 +663,7 @@
   .award-track { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; color: rgba(242,237,228,0.4); font-style: italic; }
   .grammys-narrative { display: flex; flex-direction: column; gap: 1.5rem; }
   .grammy-quote { font-family: var(--font-serif); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--gold); border-left: 3px solid var(--gold); padding-left: 1.5rem; }
-  .grammy-text { font-size: 0.95rem; line-height: 1.8; color: rgba(242,237,228,0.65); }
+  .grammy-text { font-size: 1rem; line-height: 1.85; color: rgba(242,237,228,0.65); }
   .grammy-detail { font-family: var(--font-mono); font-size: 0.7rem; line-height: 1.8; color: rgba(242,237,228,0.4); padding: 1rem; border: 1px solid rgba(242,237,228,0.08); border-left: 2px solid var(--gold); }
   .grammy-video { margin-top: 1rem; }
   .grammy-video iframe { width: 100%; aspect-ratio: 16/9; border: 1px solid rgba(245,197,24,0.2); display: block; }
@@ -683,7 +679,7 @@
   .sb-detail { border-top: 1px solid rgba(242,237,228,0.15); padding-top: 1.5rem; }
   .sb-detail-num { font-family: var(--font-display); font-size: 3rem; color: var(--gold); margin-bottom: 0.2rem; }
   .sb-detail-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; color: rgba(242,237,228,0.35); text-transform: uppercase; margin-bottom: 0.8rem; }
-  .sb-detail-text { font-size: 0.85rem; line-height: 1.6; color: rgba(242,237,228,0.55); }
+  .sb-detail-text { font-size: 0.95rem; line-height: 1.7; color: rgba(242,237,228,0.6); }
   .setlist-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.1em; color: rgba(242,237,228,0.4); border: 1px solid rgba(242,237,228,0.1); padding: 0.2rem 0.5rem; margin: 0.2rem; text-transform: uppercase; }
   .setlist-tag.highlight { border-color: var(--gold); color: var(--gold); }
   .superbowl-video { margin-top: 4rem; position: relative; z-index: 1; max-width: 900px; }
@@ -700,11 +696,11 @@
   .legal-content { padding-bottom: 3rem; padding-left: 2rem; border-left: 2px solid transparent; transition: border-color 0.3s; }
   .legal-event:hover .legal-content { border-color: rgba(200,16,46,0.3); }
   .legal-event-title { font-family: var(--font-cond); font-size: 1.1rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem; color: var(--paper); }
-  .legal-event-text { font-size: 0.85rem; line-height: 1.7; color: rgba(242,237,228,0.55); }
+  .legal-event-text { font-size: 0.95rem; line-height: 1.75; color: rgba(242,237,228,0.6); }
   .legal-sidebar { display: flex; flex-direction: column; gap: 2rem; }
   .sidebar-card { padding: 1.5rem; border: 1px solid rgba(200,16,46,0.2); background: rgba(200,16,46,0.03); }
   .sidebar-card-title { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; color: var(--red); text-transform: uppercase; margin-bottom: 0.8rem; }
-  .sidebar-card-text { font-size: 0.82rem; line-height: 1.6; color: rgba(242,237,228,0.55); }
+  .sidebar-card-text { font-size: 0.92rem; line-height: 1.65; color: rgba(242,237,228,0.55); }
 
   /* ═══ VERDICT ═══ */
   #verdict { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 3rem; background: var(--black); position: relative; overflow: hidden; }
@@ -806,6 +802,7 @@
       <span>From Diss Tracks to the Supreme Court</span>
       <span>An Interactive Scrollytelling Experience</span>
     </div>
+    <div class="hero-byline">By <strong>Rohan Dutta</strong></div>
   </div>
   <div class="scroll-hint">SCROLL TO BEGIN</div>
 </section>
@@ -818,12 +815,8 @@
     <div class="photo-panel-inner" id="torontoParallax">
       <div class="city-photo-toronto"></div>
 
-      <!-- Twitter/X embed for Toronto image -->
-      <div class="social-embed-wrap" style="opacity:0.45; filter: saturate(0.4);">
-        <blockquote class="twitter-tweet" data-theme="dark" data-conversation="none" style="max-width:100%; width:100%;">
-          <a href="https://x.com/MadelnCanada/status/1887977838835384708"></a>
-        </blockquote>
-      </div>
+      <!-- Toronto real image loaded via CSS background -->
+      <div style="display:none;"></div>
     </div>
     <div class="photo-overlay photo-overlay-toronto"></div>
     <a href="https://x.com/MadelnCanada/status/1887977838835384708" target="_blank" rel="noopener" class="embed-credit">📸 @MadelnCanada on X</a>
@@ -894,17 +887,8 @@
     <div class="photo-panel-inner" id="comptonParallax">
       <div class="city-photo-compton"></div>
 
-      <!-- Facebook embed for Compton image -->
-      <div class="social-embed-wrap" style="opacity:0.3; filter: saturate(0.5);">
-        <iframe
-          src="https://www.facebook.com/plugins/photo.php?href=https%3A%2F%2Fwww.facebook.com%2Fphoto%2F%3Ffbid%3D1013553167481417%26set%3Dpcb.2581602328698580&width=600&show_text=false"
-          width="600" height="400"
-          style="border:none;overflow:hidden;width:100%;height:100%;"
-          scrolling="no" frameborder="0"
-          allowfullscreen="true"
-          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
-        </iframe>
-      </div>
+      <!-- Compton real image loaded via CSS background -->
+      <div style="display:none;"></div>
     </div>
     <div class="photo-overlay photo-overlay-compton"></div>
     <a href="https://www.facebook.com/photo/?fbid=1013553167481417&set=pcb.2581602328698580" target="_blank" rel="noopener" class="embed-credit">📸 View on Facebook</a>
@@ -1471,9 +1455,34 @@
     </div>
   </div>
 
+  <!-- Super Bowl Images -->
+  <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:4rem;position:relative;z-index:1;">
+    <div style="overflow:hidden;">
+      <img src="https://raw.githubusercontent.com/ruhundutta/NotLikeUs/1cb2dcd29a33c9796ac1baa8bcdffbd486007e8b/25-kendrick-lamar-super-bowl-lix-halftime-show-2025-billboard-1240.webp"
+        alt="Kendrick Lamar Super Bowl LIX Halftime Show"
+        style="width:100%;height:380px;object-fit:cover;object-position:center top;display:block;filter:saturate(0.85);">
+    </div>
+    <div style="overflow:hidden;">
+      <img src="https://raw.githubusercontent.com/ruhundutta/NotLikeUs/1cb2dcd29a33c9796ac1baa8bcdffbd486007e8b/superbowl-lix-halftime-kendrick-lamar.webp"
+        alt="Kendrick Lamar Super Bowl LIX Halftime Show"
+        style="width:100%;height:380px;object-fit:cover;object-position:center;display:block;filter:saturate(0.85);">
+    </div>
+  </div>
+  <div style="position:relative;z-index:1;margin-top:0.6rem;font-family:var(--font-mono);font-size:0.5rem;letter-spacing:0.15em;color:rgba(242,237,228,0.2);text-align:right;">
+    📷 Images courtesy of <a href="https://www.billboard.com" target="_blank" rel="noopener" style="color:rgba(242,237,228,0.3);text-decoration:none;border-bottom:1px solid rgba(242,237,224,0.15);">Billboard</a>
+  </div>
+
+  <!-- YouTube link (embedding blocked by NFL/Apple Music) -->
   <div class="superbowl-video reveal">
-    <div class="superbowl-video-label">▶ Apple Music Super Bowl LIX Halftime Show — Full Performance</div>
-    <iframe src="https://www.youtube.com/embed/KDorKy-13ak" loading="lazy" allowfullscreen></iframe>
+    <div class="superbowl-video-label">Full performance — embedding blocked by NFL/Apple Music, opens on YouTube</div>
+    <a href="https://www.youtube.com/watch?v=KDorKy-13ak" target="_blank" rel="noopener"
+      style="display:flex;align-items:center;gap:1.2rem;padding:1.5rem 2rem;border:1px solid rgba(200,16,46,0.3);background:rgba(200,16,46,0.04);text-decoration:none;color:var(--paper);font-family:var(--font-cond);font-size:1.1rem;font-weight:700;letter-spacing:0.05em;">
+      <span style="font-size:2rem;color:var(--red);">▶</span>
+      <div>
+        <div>Kendrick Lamar — Apple Music Super Bowl LIX Halftime Show</div>
+        <div style="font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;color:rgba(242,237,228,0.3);margin-top:0.3rem;text-transform:uppercase;">Watch on YouTube ↗</div>
+      </div>
+    </a>
   </div>
 </section>
 
